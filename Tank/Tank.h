@@ -113,8 +113,10 @@ void Tank::draw(RenderTarget &window) {
 		Передаю функции set_current_animation спрайт такна с текстурой в виде всего тайлсета
 		и на выходе получаю спрайт с нужным кадром
 		*/
-		animation.set_current_frame(this_sprite);
-		window.draw(this_sprite);
+		if (drawable == true){
+			animation.set_current_frame(this_sprite);
+			window.draw(this_sprite);
+		}
 	}
 }
 

@@ -96,9 +96,9 @@ int main()
 			}
 			if (event.type == Event::MouseButtonPressed) {
 				if (event.key.code == Mouse::Left) {
-					delete t2;
-					delete t3;
-					delete t4;
+					t2->drawable = false;
+					t3->drawable = false;
+					t4->drawable = false;
 				}
 			}
 		}

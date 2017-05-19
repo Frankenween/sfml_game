@@ -12,10 +12,15 @@ class GameObject {
 public:
 	float xpos = 0;
 	float ypos = 0;
-	int xsize = 0;
-	int ysize = 0;
+	short int xsize = 0;
+	short int ysize = 0;
 	sf::Sprite this_sprite;
-	virtual void draw(sf::RenderTarget &window) { window.draw(this_sprite); };
+	int id;
+	bool drawable = true;
+	virtual void draw(sf::RenderTarget &window) { 
+		if (drawable == true)
+			window.draw(this_sprite); 
+	};
 };
 
 
