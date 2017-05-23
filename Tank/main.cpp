@@ -5,7 +5,6 @@
 #include "Tank.h"
 #include "Errorr.h"
 
-
 #define and &&
 #define or ||
 
@@ -97,9 +96,14 @@ int main()
 			}
 			if (event.type == Event::MouseButtonPressed) {
 				if (event.key.code == Mouse::Left) {
-					t2->drawable = false;
-					t3->drawable = false;
-					t4->drawable = false;
+					t2->degen();
+					t3->degen();
+					t4->degen();
+				}
+				if (event.key.code == Mouse::Right) {
+					t2->regen();
+					t3->regen();
+					t4->regen();
 				}
 			}
 		}

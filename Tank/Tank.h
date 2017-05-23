@@ -87,6 +87,10 @@ public:
 	void move(float x_offset, float y_offset);
 
 	void update(std::vector<GameObject*> &game_objects);
+	
+	void degen();
+	
+	void regen();
 };
 
 bool Tank::intersects_with(GameObject &second) {
@@ -103,8 +107,10 @@ IntRect Tank::get_rect() {
 }
 
 void Tank::move(float x_offset, float y_offset) {
-	dx += x_offset;
-	dy += y_offset;
+	if (available == true){
+		dx += x_offset;
+		dy += y_offset;
+	}
 }
 
 void Tank::draw(RenderTarget &window) {
@@ -113,7 +119,7 @@ void Tank::draw(RenderTarget &window) {
 		Передаю функции set_current_animation спрайт такна с текстурой в виде всего тайлсета
 		и на выходе получаю спрайт с нужным кадром
 		*/
-		if (drawable == true){
+		if (available == true){
 			animation.set_current_frame(this_sprite);
 			window.draw(this_sprite);
 		}
@@ -121,26 +127,38 @@ void Tank::draw(RenderTarget &window) {
 }
 
 void Tank::update(std::vector<GameObject*> &game_objects) {
-	this_sprite.move(dx, 0);
-	xpos += dx;
-	for (auto &gm : game_objects) {
-		if (intersects_with(*gm) == true) {
-			printf("Called intersect with X\n");
-			this_sprite.move(-dx, 0);
-			xpos -= dx;
-			break;
+	if (available == true){
+		this_sprite.move(dx, 0);
+		xpos += dx;
+		for (auto &gm : game_objects) {
+			if (intersects_with(*gm) == true and gm->available == true) {
+				printf("Called intersect with X\n");
+				this_sprite.move(-dx, 0);
+				xpos -= dx;
+				break;
+			}
 		}
-	}
-	this_sprite.move(0, dy);
-	ypos += dy;
-	for (auto &gm : game_objects) {
-		if (intersects_with(*gm) == true) {
-			printf("Called intersect with Y\n");
-			this_sprite.move(0, -dy);
-			ypos -= dy;
-			break;
+		this_sprite.move(0, dy);
+		ypos += dy;
+		for (auto &gm : game_objects) {
+			if (intersects_with(*gm) == true and gm->available == true) {
+				printf("Called intersect with Y\n");
+				this_sprite.move(0, -dy);
+				ypos -= dy;
+				break;
+			}
 		}
+		dx = 0;
+		dy = 0;
 	}
-	dx = 0;
-	dy = 0;
+}
+
+
+void Tank::degen() {
+	available = false;
+}
+
+
+void Tank::regen() {
+	available = true;
 }

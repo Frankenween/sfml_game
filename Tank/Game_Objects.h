@@ -16,9 +16,9 @@ public:
 	short int ysize = 0;
 	sf::Sprite this_sprite;
 	int id;
-	bool drawable = true;
+	bool available = true;
 	virtual void draw(sf::RenderTarget &window) { 
-		if (drawable == true)
+		if (available == true)
 			window.draw(this_sprite); 
 	};
 };
