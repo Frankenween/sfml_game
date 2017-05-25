@@ -14,6 +14,11 @@
 using namespace sf;
 
 
+struct MoveKey {
+	bool a, w, s, d = false;
+};
+
+
 template <typename T>
 std::vector<T> make_list(std::string line) {
 	std::vector<T> ret;
@@ -46,9 +51,11 @@ void generate_map_from_file(std::string mname, std::vector<GameObject*> &obj) {
 
 int main()
 {
-	RenderWindow window(VideoMode(32 * 20, 32 * 20), "SFML works!");
+	RenderWindow window(VideoMode(32 * 20, 32 * 20), "Tanks");
 	std::vector<GameObject*> game_rects;
 	window.setFramerateLimit(60);
+
+	MoveKey Keyboard_Keys_Pressed;
 
 	Tank *t1 = new Tank(270, 270, "C:/tank_git/Release/tank1.png", 100);
 	Tank *t2 = new Tank(50, 35, "C:/tank_git/Release/tank1.png", 100);
@@ -70,28 +77,30 @@ int main()
 				window.close();
 			if (event.type == Event::KeyPressed) {
 				if (event.key.code == Keyboard::W) {
-					t1->move(0, -1);
-					#ifdef DEBUGMODE
-					printf("(%2f;%2f)\n", t1->xpos, t1->ypos);
-					#endif // DEBUGMODE
+					Keyboard_Keys_Pressed.w = true;
 				}
 				if (event.key.code == Keyboard::A) {
-					t1->move(-1, 0);
-					#ifdef DEBUGMODE
-					printf("(%2f;%2f)\n", t1->xpos, t1->ypos);
-					#endif // DEBUGMODE
+					Keyboard_Keys_Pressed.a = true;
 				}
 				if (event.key.code == Keyboard::D) {
-					t1->move(1, 0);
-					#ifdef DEBUGMODE
-					printf("(%2f;%2f)\n", t1->xpos, t1->ypos);
-					#endif // DEBUGMODE
+					Keyboard_Keys_Pressed.d = true;
 				}
 				if (event.key.code == Keyboard::S) {
-					t1->move(0, 1);
-					#ifdef DEBUGMODE
-					printf("(%2f;%2f)\n", t1->xpos, t1->ypos);
-					#endif // DEBUGMODE
+					Keyboard_Keys_Pressed.s = true;
+				}
+			}
+			if (event.type == Event::KeyReleased) {
+				if (event.key.code == Keyboard::W) {
+					Keyboard_Keys_Pressed.w = false;
+				}
+				if (event.key.code == Keyboard::A) {
+					Keyboard_Keys_Pressed.a = false;
+				}
+				if (event.key.code == Keyboard::D) {
+					Keyboard_Keys_Pressed.d = false;
+				}
+				if (event.key.code == Keyboard::S) {
+					Keyboard_Keys_Pressed.s = false;
 				}
 			}
 			if (event.type == Event::MouseButtonPressed) {
@@ -107,6 +116,15 @@ int main()
 				}
 			}
 		}
+
+		if (Keyboard_Keys_Pressed.w == true)
+			t1->move(0, -1);
+		if (Keyboard_Keys_Pressed.a == true)
+			t1->move(-1, 0);
+		if (Keyboard_Keys_Pressed.s == true)
+			t1->move(0, 1);
+		if (Keyboard_Keys_Pressed.d == true)
+			t1->move(1, 0);
 		
 		window.clear();
 		t1->update(game_rects);

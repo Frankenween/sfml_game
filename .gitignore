@@ -1,0 +1,16 @@
+*.vcxproj
+*.filters
+*.user
+*.obj
+*.log
+*.pdb
+*.tlog
+*.idb
+*.iobj
+*.lib
+*.ipdb
+*.exp
+*.dll
+.vs
+*.sln
+*.ilk

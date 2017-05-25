@@ -14,12 +14,12 @@ using namespace sf;
 
 class Tank_Animation {
 public:
-	int frames;
-	int time_for_loop;
-	int current_frame_number = 0;
-	int time = 0;
-	int tilesize_x;
-	int tilesize_y;
+	short int frames;  // Кол-во кадров
+	unsigned short int time_for_loop; // Время на кадр
+	short int current_frame_number = 0; // Текущий номер кадра
+	unsigned short int time = 0;
+	short int tilesize_x;
+	short int tilesize_y;
 	Clock timer;
 	Texture tileset_texture; // В этой текстуре содержится весь тайлсет
 	Image img;
@@ -31,8 +31,7 @@ public:
 			return;
 		}
 		img.createMaskFromColor(Color::White);
-		tileset_texture.loadFromImage(img);
-		 // Загружаем изображение из файла
+		tileset_texture.loadFromImage(img); // Загружаем изображение из файла
 		tilesize_x = tileset_texture.getSize().x / fr;
 		tilesize_y = tileset_texture.getSize().y;
 		frames = fr;
@@ -63,11 +62,11 @@ public:
 
 class Tank:public GameObject{
 public:
-	float health;
+	short int health; // Здоровье танка
 	Tank_Animation animation;
-	float dx = 0;
-	float dy = 0;
-	Tank(float x, float y, std::string fname, float tank_health):GameObject () {
+	float dx = 0; // Скорость по х
+	float dy = 0; // Скорость по у
+	Tank(float x, float y, std::string fname, short int tank_health):GameObject () {
 		animation.init(fname, 2);
 		this_sprite.setPosition(x, y);
 		xpos = x;
@@ -94,6 +93,9 @@ public:
 };
 
 bool Tank::intersects_with(GameObject &second) {
+	/*
+	Проверка экземпляра класса на пересечение с другим объектом
+	*/
 	if ((alg::max<float>(xpos, second.xpos) < alg::min<float>(xpos + xsize, second.xpos + second.xsize)) == true and
 		(alg::max<float>(ypos, second.ypos) < alg::min<float>(ypos + ysize, second.ypos + second.ysize)) == true ) {
 		return true;
@@ -127,23 +129,27 @@ void Tank::draw(RenderTarget &window) {
 }
 
 void Tank::update(std::vector<GameObject*> &game_objects) {
+	/*
+	Сдвигаем экземпляр на dx, проверяем столкновения.
+	Затем сдвигает на dy и опять проверяем столкновения.
+	*/
 	if (available == true){
-		this_sprite.move(dx, 0);
+		this_sprite.move(dx, 0); // Сдвигаем
 		xpos += dx;
 		for (auto &gm : game_objects) {
-			if (intersects_with(*gm) == true and gm->available == true) {
+			if (intersects_with(*gm) == true and gm->available == true) { // Проверяем
 				printf("Called intersect with X\n");
-				this_sprite.move(-dx, 0);
+				this_sprite.move(-dx, 0); // Если столкнулись, то возвращаем назад
 				xpos -= dx;
 				break;
 			}
 		}
-		this_sprite.move(0, dy);
-		ypos += dy;
+		this_sprite.move(0, dy); // Сдвигаем
+		ypos += dy; 
 		for (auto &gm : game_objects) {
-			if (intersects_with(*gm) == true and gm->available == true) {
+			if (intersects_with(*gm) == true and gm->available == true) { // Проверяем
 				printf("Called intersect with Y\n");
-				this_sprite.move(0, -dy);
+				this_sprite.move(0, -dy); // Если столкнулись, то возвращаем назад
 				ypos -= dy;
 				break;
 			}

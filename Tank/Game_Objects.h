@@ -43,7 +43,7 @@ public:
 	}
 
 
-	void got_damage(float damage) {
+	void got_damage(short int damage) {
 		if (can_destroy == true)
 			health -= damage;
 	}
@@ -58,7 +58,7 @@ public:
 	}
 
 private:
-	int health;
+	short int health;
 	bool can_destroy = true;
 	bool drawable = true;
 	sf::Texture blTextr;
